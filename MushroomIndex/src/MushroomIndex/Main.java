@@ -21,7 +21,10 @@ public class Main {
             System.out.println("2. Add Mushroom");
             System.out.println("3. Remove Mushroom");
             System.out.println("4. Save Mushrooms");
-            System.out.println("5. Exit");
+            System.out.println("5. Interact with Mushroom");
+            System.out.println("6. Undo Last Action");
+            System.out.println("7. Redo Last Action");
+            System.out.println("8. Exit");
             System.out.print("Choose an option: ");
 
             if (scanner.hasNextInt()) {
@@ -53,6 +56,14 @@ public class Main {
                     }
                     case 4 -> manager.saveMushroomsToFile();
                     case 5 -> {
+                        System.out.print("Enter mushroom name to interact with: ");
+                        String name = scanner.nextLine();
+                        manager.interactWithMushroom(name);
+                    
+                    }
+                    case 6 -> manager.undo();
+                    case 7 -> manager.redo();
+                    case 8 -> {
                         System.out.println("Exiting program.");
                         running = false;
                     }
