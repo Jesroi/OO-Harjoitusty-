@@ -1,83 +1,31 @@
 package MushroomIndex;
 
-import java.io.FileInputStream;
-import java.io.ObjectInputStream;
-import java.util.Scanner;
-
-import java.util.Scanner;
+import javax.swing.*;
 
 public class Main {
     public static void main(String[] args) {
+        // Load mushrooms from file when the application starts
         MushroomManager manager = new MushroomManager();
-        Scanner scanner = new Scanner(System.in);
-
         manager.loadMushroomsFromFile();
-        
-        boolean running = true;
 
-        while (running) {
-            System.out.println("\nMenu:");
-            System.out.println("1. List Mushrooms");
-            System.out.println("2. Add Mushroom");
-            System.out.println("3. Remove Mushroom");
-            System.out.println("4. Save Mushrooms");
-            System.out.println("5. Interact with Mushroom");
-            System.out.println("6. Undo Last Action");
-            System.out.println("7. Redo Last Action");
-            System.out.println("8. Exit");
-            System.out.print("Choose an option: ");
+        // Make sure GUI runs on the Event Dispatch Thread (EDT)
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                // Create the main JFrame for the GUI
+                JFrame frame = new JFrame("Mushroom Manager");
+                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                frame.setSize(400, 300);  // Set the size of the window
 
-            if (scanner.hasNextInt()) {
-                int choice = scanner.nextInt();
-                scanner.nextLine(); // Consume leftover newline
+                // Create the MushroomPanel and pass in the manager to handle mushroom operations
+                MushroomApp panel = new MushroomApp(manager);  // This now works
 
-                switch (choice) {
-                    case 1 -> manager.listMushrooms();
-                    case 2 -> {
-                        System.out.print("Enter mushroom name: ");
-                        String name = scanner.nextLine();
-                        System.out.print("Is it toxic? (yes/no): ");
-                        String toxic = scanner.nextLine();
-                        if (toxic.equalsIgnoreCase("yes")) {
-                            System.out.print("Enter toxicity level: ");
-                            String toxicityLevel = scanner.nextLine();
-                            manager.addMushroom(new Toxicity(name, toxicityLevel));
-                        } else {
-                            System.out.print("Is it gourmet? (yes/no): ");
-                            boolean isGourmet = scanner.nextLine().equalsIgnoreCase("yes");
-                            manager.addMushroom(new Edibility(name, isGourmet));
-                        }
-                        System.out.println("Mushroom added.");
-                    }
-                    case 3 -> {
-                        System.out.print("Enter mushroom name to remove: ");
-                        String name = scanner.nextLine();
-                        manager.removeMushroom(name);
-                    }
-                    case 4 -> manager.saveMushroomsToFile();
-                    case 5 -> {
-                        System.out.print("Enter mushroom name to interact with: ");
-                        String name = scanner.nextLine();
-                        manager.interactWithMushroom(name);
-                    
-                    }
-                    case 6 -> manager.undo();
-                    case 7 -> manager.redo();
-                    case 8 -> {
-                        System.out.println("Exiting program.");
-                        running = false;
-                    }
-                    default -> System.out.println("Invalid option. Try again.");
-                }
-            } else {
-                System.out.println("Invalid input. Please enter a number.");
-                scanner.nextLine(); // Clear invalid input
+                // Add the panel to the frame
+                frame.add(panel);
+                frame.setVisible(true);  // Make the frame visible
             }
-        }
-
-        scanner.close();
+        });
     }
 }
-
 
 

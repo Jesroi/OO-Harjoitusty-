@@ -4,8 +4,9 @@ public class Edibility extends Mushrooms {
     private static final long serialVersionUID = 1L;
     private boolean isGourmet;
 
+    // Modify the constructor to pass 'name' and 'type' to the superclass constructor
     public Edibility(String name, boolean isGourmet) {
-        super(name);
+        super(name, "Edible"); // 'Edible' is passed as the type
         this.isGourmet = isGourmet;
     }
 
@@ -18,4 +19,3 @@ public class Edibility extends Mushrooms {
         System.out.println(getName() + " is edible. Gourmet: " + (isGourmet ? "Yes" : "No"));
     }
 }
-
