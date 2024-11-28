@@ -1,6 +1,6 @@
 package MushroomIndex;
 
-public class Action {
+public class Action {                                 /**enum classi undo ja redo toiminnallisuuden mahdollistamiseksi*/
     public enum ActionType {
         ADD, REMOVE
     }

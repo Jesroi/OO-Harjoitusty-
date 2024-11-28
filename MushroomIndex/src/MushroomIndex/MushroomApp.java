@@ -12,30 +12,30 @@ public class MushroomApp extends JFrame {
     private JTextField nameField;
     private JComboBox<String> typeComboBox;
     private JLabel detailLabel;
-    private JCheckBox gourmetCheckBox;  // For gourmet
-    private JTextField toxicityField;   // For toxicity level
+    private JCheckBox gourmetCheckBox;  
+    private JTextField toxicityField;   
 
-    public MushroomApp(MushroomManager manager) {
+    public MushroomApp(MushroomManager manager) {                     /**manager set,listat*/
         this.manager = manager;
         listModel = new DefaultListModel<>();
         mushroomList = new JList<>(listModel);
         nameField = new JTextField(15);
         typeComboBox = new JComboBox<>(new String[]{"Gourmet", "Poisonous"});
 
-        // Set up the frame
-        setTitle("Mushroom Manager");
+        
+        setTitle("Mushroom Manager");                                      /** frame*/
         setSize(600, 400);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
 
-        // Mushroom list panel
+                                                                        /**lista paneelit*/
         JPanel topPanel = new JPanel(new BorderLayout());
         topPanel.add(new JScrollPane(mushroomList), BorderLayout.CENTER);
         add(topPanel, BorderLayout.CENTER);
 
-        // Input panel
-        JPanel inputPanel = new JPanel();
+        
+        JPanel inputPanel = new JPanel();                                  
         inputPanel.add(new JLabel("Name:"));
         inputPanel.add(nameField);
         inputPanel.add(new JLabel("Type:"));
@@ -48,45 +48,44 @@ public class MushroomApp extends JFrame {
         toxicityField = new JTextField(10);
         inputPanel.add(toxicityField);
 
-        // Initialize detail label
-        detailLabel = new JLabel("Select a mushroom to see details.");
+       
+        detailLabel = new JLabel("Select a mushroom to see details.");                     /** details label*/
         detailLabel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        add(detailLabel, BorderLayout.EAST); // Add it to the right side
+        add(detailLabel, BorderLayout.EAST);                                      /** east*/
 
-        // Button panel
-        JPanel buttonPanel = new JPanel();
+        
+        JPanel buttonPanel = new JPanel();                        /** buttons */
         JButton addButton = new JButton("Add Mushroom");
         JButton removeButton = new JButton("Remove Mushroom");
         JButton undoButton = new JButton("Undo");
         JButton redoButton = new JButton("Redo");
-        JButton saveButton = new JButton("Save to File"); // New Save button
+        JButton saveButton = new JButton("Save to File"); /**tallennus*/
 
-        // Add action listeners
-        addButton.addActionListener(e -> addMushroom());
+       
+        addButton.addActionListener(e -> addMushroom());               /** listenerit*/ 
         removeButton.addActionListener(e -> removeMushroom());
         undoButton.addActionListener(e -> undoAction());
         redoButton.addActionListener(e -> redoAction());
-        saveButton.addActionListener(e -> saveToFile()); // Save button action
+        saveButton.addActionListener(e -> saveToFile()); 
 
-        // Add buttons to panel
-        buttonPanel.add(addButton);
+      
+        buttonPanel.add(addButton);                           /** napit paneeliin*/
         buttonPanel.add(removeButton);
         buttonPanel.add(undoButton);
         buttonPanel.add(redoButton);
-        buttonPanel.add(saveButton); // Add Save button to the panel
+        buttonPanel.add(saveButton); 
 
         add(buttonPanel, BorderLayout.SOUTH);
 
-        // Setup the detail label listener
+        /**stup the detail label listener*/
         setupDetailLabel();
     }
 
-    private void saveToFile() {
-        manager.saveMushroomsToFile(); // Trigger the save operation
+    private void saveToFile() {                       /**quick save to file*/
+        manager.saveMushroomsToFile(); 
     }
 
-    // Method to add mushroom
-    private void addMushroom() {
+    private void addMushroom() {                               /** add mush*/
         String name = nameField.getText().trim();
         String type = (String) typeComboBox.getSelectedItem();
         boolean isGourmet = gourmetCheckBox.isSelected();
@@ -99,29 +98,26 @@ public class MushroomApp extends JFrame {
 
         Mushrooms mushroom;
         
-        if (type.equals("Poisonous") && !toxicity.isEmpty()) {
-            // Create Toxicity mushroom if Toxicity level is provided
+        if (type.equals("Poisonous") && !toxicity.isEmpty()) {        /**toxic tai gourmet tai ei ollenkaan sini*/
             mushroom = new Toxicity(name, toxicity);
         } else if (type.equals("Gourmet")) {
-            // Create Edibility mushroom
             mushroom = new Edibility(name, isGourmet);
         } else {
             JOptionPane.showMessageDialog(this, "Please provide valid input for the selected type.");
             return;
         }
 
-        manager.addMushroom(mushroom); // Add the mushroom to the manager
-        updateMushroomList();          // Refresh the list
-        clearInputFields();            // Clear the fields after adding
+        manager.addMushroom(mushroom); 
+        updateMushroomList();          
+        clearInputFields();            
     }
 
-    private void clearInputFields() {
+    private void clearInputFields() {                      /**clear*/
         nameField.setText("");
         gourmetCheckBox.setSelected(false);
         toxicityField.setText("");
     }
-    // Method to remove mushroom
-    private void removeMushroom() {
+    private void removeMushroom() {                           /**remove*/
         String name = mushroomList.getSelectedValue();
         if (name == null) {
             JOptionPane.showMessageDialog(this, "Please select a mushroom to remove.");
@@ -132,44 +128,39 @@ public class MushroomApp extends JFrame {
         updateMushroomList();
     }
 
-    // Undo the last action
-    private void undoAction() {
+    private void undoAction() {                 /** undo*/
         manager.undo();
         updateMushroomList();
     }
 
-    // Redo the last undone action
-    private void redoAction() {
+    private void redoAction() {                   /**redo*/
         manager.redo();
         updateMushroomList();
     }
 
-    // Update the JList with the latest mushrooms
-    private void updateMushroomList() {
+    private void updateMushroomList() {              /** update */
         List<Mushrooms> mushrooms = manager.getMushrooms();
         listModel.clear();
         for (Mushrooms mushroom : mushrooms) {
-            listModel.addElement(mushroom.toString());
+            listModel.addElement(mushroom.getName());  /*ainoastaan nimi listassa*/
         }
     }
 
     public static void main(String[] args) {
-        // Initialize the MushroomManager and load mushrooms
-        MushroomManager manager = new MushroomManager();
-        manager.loadMushroomsFromFile(); // Load mushrooms from file or initialize as needed       
-        // Make sure GUI runs on the Event Dispatch Thread (EDT)
+        MushroomManager manager = new MushroomManager();                         /**manager auki*/
+        manager.loadMushroomsFromFile();                                      /**lataa filestä*/
         SwingUtilities.invokeLater(() -> {
-            // Pass the manager instance when creating MushroomApp
             MushroomApp app = new MushroomApp(manager); 
             app.updateMushroomList();
-            app.setVisible(true);  // Make the GUI visible
+            app.setVisible(true);  
         });
     }
-    private void setupDetailLabel() {
+
+    private void setupDetailLabel() {                                 /** yksityiskohdat sivu listaan*/
         mushroomList.addListSelectionListener(e -> {
             if (!e.getValueIsAdjusting() && mushroomList.getSelectedValue() != null) {
                 String selectedName = mushroomList.getSelectedValue();
-                Mushrooms selectedMushroom = manager.getMushroomByName(selectedName.split(" ")[0]);
+                Mushrooms selectedMushroom = manager.getMushroomByName(selectedName);
 
                 if (selectedMushroom instanceof Edibility) {
                     Edibility edible = (Edibility) selectedMushroom;
@@ -188,12 +179,7 @@ public class MushroomApp extends JFrame {
                 } else {
                     detailLabel.setText("Unknown mushroom type.");
                 }
-                
             }
-            
         });
-   
-    
     }
-        
-    }
+}

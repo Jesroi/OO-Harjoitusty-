@@ -11,12 +11,12 @@ import java.util.List;
 import java.util.Stack;
 import java.util.stream.Collectors;
 
-public class MushroomManager {
+public class MushroomManager {              /** list ja stack*/
     private List<Mushrooms> mushrooms;
     private Stack<Action> undoStack;
     private Stack<Action> redoStack;
 
-    public MushroomManager() {
+    public MushroomManager() {                   //* data*
         mushrooms = new ArrayList<>();
         undoStack = new Stack<>();
         redoStack = new Stack<>();
@@ -28,8 +28,8 @@ public class MushroomManager {
 
     public void addMushroom(Mushrooms mushroom) {
         mushrooms.add(mushroom);
-        undoStack.push(new Action(Action.ActionType.ADD, mushroom)); // Push the action
-        redoStack.clear(); // Clear redo stack after new action
+        undoStack.push(new Action(Action.ActionType.ADD, mushroom)); /** Push the action */
+        redoStack.clear();                                          /** Clear redo stack after new action */
         System.out.println("Mushroom added: " + mushroom.getName());
     }
 
@@ -41,15 +41,15 @@ public class MushroomManager {
 
         if (mushroom != null) {
             mushrooms.remove(mushroom);
-            undoStack.push(new Action(Action.ActionType.REMOVE, mushroom)); // Push the action
-            redoStack.clear(); // Clear redo stack after new action
+            undoStack.push(new Action(Action.ActionType.REMOVE, mushroom)); /** Push the action*/
+            redoStack.clear();                                             /** Clear redo stack*/
             System.out.println("Mushroom removed: " + mushroom.getName());
         } else {
             System.out.println("Mushroom \"" + name + "\" not found.");
         }
     }
 
-    // Undo action (move action from undo stack to redo stack)
+                                                           /** Undo action,move action from undo stack to redo stack*/
     public void undo() {
         if (undoStack.isEmpty()) {
             System.out.println("No actions to undo.");
@@ -57,17 +57,17 @@ public class MushroomManager {
         }
 
         Action lastAction = undoStack.pop();
-        redoStack.push(lastAction); // Push action to redo stack
+        redoStack.push(lastAction);                                   /** Push action to redo stack*/
 
         switch (lastAction.getType()) {
-            case ADD -> mushrooms.remove(lastAction.getMushroom()); // Undo add (remove the mushroom)
-            case REMOVE -> mushrooms.add(lastAction.getMushroom()); // Undo remove (add the mushroom back)
+            case ADD -> mushrooms.remove(lastAction.getMushroom()); /** Undo add, remove the mushroom */
+            case REMOVE -> mushrooms.add(lastAction.getMushroom()); /** Undo remove, add the mushroom back*/
         }
 
         System.out.println("Undo performed: " + lastAction.getType());
     }
 
-    // Redo action (move action from redo stack to undo stack)
+                                                         /** Redo action, move action from redo stack to undo stack*/
     public void redo() {
         if (redoStack.isEmpty()) {
             System.out.println("No actions to redo.");
@@ -75,18 +75,18 @@ public class MushroomManager {
         }
 
         Action lastUndone = redoStack.pop();
-        undoStack.push(lastUndone); // Push action to undo stack
+        undoStack.push(lastUndone);                                   /** Push action to undo stack*/
 
         switch (lastUndone.getType()) {
-            case ADD -> mushrooms.add(lastUndone.getMushroom()); // Redo add (add the mushroom)
-            case REMOVE -> mushrooms.remove(lastUndone.getMushroom()); // Redo remove (remove the mushroom)
+            case ADD -> mushrooms.add(lastUndone.getMushroom());           /** Redo add, add the mushroom */
+            case REMOVE -> mushrooms.remove(lastUndone.getMushroom());   /** Redo remove,remove the mushroom */
         }
 
         System.out.println("Redo performed: " + lastUndone.getType());
     }
 
 
-    public void listMushrooms() {
+    public void listMushrooms() {                                          /**listataan sienet*/
         if (mushrooms.isEmpty()) {
             System.out.println("No mushrooms in the list.");
         } else {
@@ -96,8 +96,8 @@ public class MushroomManager {
                 .sorted(Comparator.comparing(Mushrooms::getName))
                 .collect(Collectors.toList());
 
-        // Separate into poisonous and gourmet mushrooms
-        List<Mushrooms> poisonous = sortedMushrooms.stream()
+ 
+        List<Mushrooms> poisonous = sortedMushrooms.stream()                            /**eritetään poisonous ja gourme*/
                 .filter(m -> m instanceof Toxicity)
                 .collect(Collectors.toList());
 
@@ -124,7 +124,7 @@ public class MushroomManager {
                 .filter(m -> !(poisonous.contains(m) || gourmet.contains(m)))
                 .forEach(m -> System.out.println("  - " + m.getName()));
     }
-    public void interactWithMushroom(String name) {
+    public void interactWithMushroom(String name) {                                              /**interact, etsii listasta  */
         Mushrooms mushroom = mushrooms.stream()
                 .filter(m -> m.getName().equalsIgnoreCase(name))
                 .findFirst()
@@ -137,7 +137,7 @@ public class MushroomManager {
     }
 
 
-    public void saveMushroomsToFile() {
+    public void saveMushroomsToFile() {                                                                    /**tallentaa filen */
         try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("mushrooms.dat"))) {
             out.writeObject(mushrooms);
             System.out.println("Mushrooms saved to file.");
@@ -146,7 +146,7 @@ public class MushroomManager {
         }
     }
 
-    public void loadMushroomsFromFile() {
+    public void loadMushroomsFromFile() {                                                      /**lataa file */
         File file = new File("mushrooms.dat");
         System.out.println("Attempting to load from file: " + file.getAbsolutePath());
         if (!file.exists()) {
@@ -169,7 +169,7 @@ public class MushroomManager {
                 return mushroom;
             }
         }
-        return null;  // If no mushroom found by the given name
+        return null;                                   /**palauttaa jos ei  */
     }
 }
 

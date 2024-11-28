@@ -2,15 +2,13 @@ package MushroomIndex;
 
 import java.io.Serializable;
 
-public class Mushroom extends Mushrooms implements Serializable {
-    // Constructor that calls the super class constructor
+public class Mushroom extends Mushrooms implements Serializable {                /** mushroom class*/
     public Mushroom(String name, String type) {
-        super(name);  // Call the Mushrooms constructor with name and type
+        super(name);                                 
     }
 
     @Override
-    public void interact() {
-        // Implementation of interaction logic
+    public void interact() {                                                 /** interact */
         System.out.println("Interacting with " + getName());
     }
 }
