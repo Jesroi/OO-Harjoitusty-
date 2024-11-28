@@ -1,17 +1,22 @@
 package MushroomIndex;
+import java.io.Serializable;
 
-public class Edibility extends Mushrooms {
+public class Edibility extends Mushrooms implements Serializable {
     private static final long serialVersionUID = 1L;
     private boolean isGourmet;
 
-    // Modify the constructor to pass 'name' and 'type' to the superclass constructor
     public Edibility(String name, boolean isGourmet) {
-        super(name, "Edible"); // 'Edible' is passed as the type
+        super(name);
         this.isGourmet = isGourmet;
     }
 
     public boolean isGourmet() {
         return isGourmet;
+    }
+
+    @Override
+    public String toString() {
+        return "Edible Mushroom: " + getName() + " (Gourmet: " + (isGourmet ? "Yes" : "No") + ")";
     }
 
     @Override

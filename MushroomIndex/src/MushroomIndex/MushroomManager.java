@@ -148,32 +148,30 @@ public class MushroomManager {
 
     public void loadMushroomsFromFile() {
         File file = new File("mushrooms.dat");
+        System.out.println("Attempting to load from file: " + file.getAbsolutePath());
         if (!file.exists()) {
             System.out.println("No previous data found. Starting fresh.");
             mushrooms = new ArrayList<>();
-            return;
-        }
-
-        try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(file))) {
-            mushrooms = (List<Mushrooms>) in.readObject();
-            System.out.println("Mushrooms loaded successfully.");
-        } catch (IOException e) {
-            System.out.println("Error loading mushrooms: " + e.getMessage());
-            mushrooms = new ArrayList<>();  
-        } catch (ClassNotFoundException e) {
-            System.out.println("Error: Class not found. " + e.getMessage());
-            mushrooms = new ArrayList<>();
-        }
+        } else {
+            try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(file))) {
+                mushrooms = (List<Mushrooms>) in.readObject();
+                System.out.println("Mushrooms loaded successfully.");
+            } catch (IOException | ClassNotFoundException e) {
+                System.out.println("Error loading mushrooms: " + e.getMessage());
+                mushrooms = new ArrayList<>();
+        }}
+        
+        
     }
-
-    
-   
+    public Mushrooms getMushroomByName(String name) {
+        for (Mushrooms mushroom : mushrooms) {
+            if (mushroom.getName().equalsIgnoreCase(name)) {
+                return mushroom;
+            }
+        }
+        return null;  // If no mushroom found by the given name
+    }
 }
-
-                                        
-        
-
-        
 
         
 

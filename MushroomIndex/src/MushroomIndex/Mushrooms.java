@@ -2,23 +2,24 @@ package MushroomIndex;
 import java.io.Serializable;
 
 public abstract class Mushrooms implements Serializable {
+    private static final long serialVersionUID = 1L;
     private String name;
-    private String type;
 
-    // Constructor to initialize the name and type
-    public Mushrooms(String name, String type) {
+    // Constructor
+    public Mushrooms(String name) {
         this.name = name;
-        this.type = type;
     }
 
+    // Getter for name
     public String getName() {
         return name;
     }
 
-    public String getType() {
-        return type;
-    }
-
-    // Abstract method for interacting with mushrooms
+    // Abstract method for interaction
     public abstract void interact();
+
+    @Override
+    public String toString() {
+        return name;
+    }
 }

@@ -1,9 +1,11 @@
 package MushroomIndex;
 
-public class Mushroom extends Mushrooms {
+import java.io.Serializable;
+
+public class Mushroom extends Mushrooms implements Serializable {
     // Constructor that calls the super class constructor
     public Mushroom(String name, String type) {
-        super(name, type);  // Call the Mushrooms constructor with name and type
+        super(name);  // Call the Mushrooms constructor with name and type
     }
 
     @Override
