@@ -24,7 +24,7 @@ public class MushroomApp extends JFrame {
 
         
         setTitle("Mushroom Manager");                                      /** frame*/
-        setSize(600, 400);
+        setSize(800, 400);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
@@ -60,10 +60,11 @@ public class MushroomApp extends JFrame {
         JButton undoButton = new JButton("Undo");
         JButton redoButton = new JButton("Redo");
         JButton saveButton = new JButton("Save to File"); /**tallennus*/
-
+        JButton interactButton = new JButton("Interact with Mushroom");
        
         addButton.addActionListener(e -> addMushroom());               /** listenerit*/ 
         removeButton.addActionListener(e -> removeMushroom());
+        interactButton.addActionListener(e -> interactWithSelectedMushroom());
         undoButton.addActionListener(e -> undoAction());
         redoButton.addActionListener(e -> redoAction());
         saveButton.addActionListener(e -> saveToFile()); 
@@ -74,12 +75,28 @@ public class MushroomApp extends JFrame {
         buttonPanel.add(undoButton);
         buttonPanel.add(redoButton);
         buttonPanel.add(saveButton); 
+        buttonPanel.add(interactButton);
 
         add(buttonPanel, BorderLayout.SOUTH);
 
         /**stup the detail label listener*/
         setupDetailLabel();
     }
+    private void interactWithSelectedMushroom() {
+        String selectedName = mushroomList.getSelectedValue();
+        if (selectedName == null) {
+            JOptionPane.showMessageDialog(this, "Please select a mushroom to interact with.", "No Selection", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        Mushrooms selectedMushroom = manager.getMushroomByName(selectedName);
+        if (selectedMushroom != null) {
+            selectedMushroom.interact();                  /** Call  interact/popup */
+        } else {
+            JOptionPane.showMessageDialog(this, "Mushroom not found.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
 
     private void saveToFile() {                       /**quick save to file*/
         manager.saveMushroomsToFile(); 

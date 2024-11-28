@@ -1,6 +1,8 @@
 package MushroomIndex;
 import java.io.Serializable;
 
+import javax.swing.JOptionPane;
+
 public class Toxicity extends Mushrooms implements Serializable {
     private static final long serialVersionUID = 1L;                     //* serializable että tallenus toimii*/
     private String toxicityLevel;
@@ -24,6 +26,7 @@ public class Toxicity extends Mushrooms implements Serializable {
 
     @Override
     public void interact() {
-        System.out.println("Stay away from " + getName() + "! Toxicity: " + toxicityLevel);
+    	JOptionPane.showMessageDialog(null, "This mushroom is toxic! Toxicity level: " + toxicityLevel,           /**interact printit*/
+                "Mushroom Interaction", JOptionPane.ERROR_MESSAGE);
     }
 }
